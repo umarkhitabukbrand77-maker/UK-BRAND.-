@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK BRAND - Fresh finds best prices</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* Reset */
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+  body { background: #fff; color: #000; }
+  a { text-decoration: none; color: inherit; }
+
+  /* Header / Hero */
+  header { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+  header img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); }
+  .hero-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; text-align: center; }
+  .hero-text h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+  .hero-text button { padding: 1rem 2rem; font-size: 1.2rem; font-weight: 700; background: red; border: none; color: #fff; cursor: pointer; transition: 0.3s; }
+  .hero-text button:hover { background: #e60000; }
+
+  /* Products Carousel */
+  #products { padding: 4rem 1rem; background: #f7f7f7; }
+  #products h2 { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
+  .carousel { display: flex; overflow-x: auto; scroll-behavior: smooth; gap: 1rem; padding-bottom: 1rem; }
+  .product-card { min-width: 250px; background: #fff; border-radius: 8px; padding: 1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s; }
+  .product-card:hover { transform: translateY(-5px); }
+  .product-card img { width: 100%; border-radius: 8px; }
+  .product-card h3 { font-size: 1.2rem; margin: 0.5rem 0; }
+  .product-card p { font-weight: 700; margin-bottom: 0.5rem; }
+  .product-card button { padding: 0.5rem 1rem; background: red; color: #fff; border: none; cursor: pointer; width: 100%; border-radius: 5px; transition: 0.3s; }
+  .product-card button:hover { background: #e60000; }
+
+  /* Floating Cart */
+  .cart-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #000; color: #fff; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; font-size: 1.2rem; }
+  .cart-count { position: absolute; top: -8px; right: -8px; background: red; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
+
+  /* Cart Modal */
+  .cart-modal { position: fixed; top: 0; right: -100%; width: 350px; height: 100%; background: #fff; box-shadow: -4px 0 10px rgba(0,0,0,0.2); transition: 0.3s; z-index: 999; display: flex; flex-direction: column; }
+  .cart-modal.active { right: 0; }
+  .cart-header { padding: 1rem; font-weight: 700; font-size: 1.2rem; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+  .cart-header button { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1rem; }
+  .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+  .cart-item-info { flex: 1; margin-left: 0.5rem; }
+  .cart-item-info h4 { font-size: 1rem; }
+  .cart-item-info p { font-size: 0.9rem; font-weight: 700; }
+  .cart-item button { background: red; border: none; color: #fff; padding: 0.3rem 0.6rem; cursor: pointer; border-radius: 5px; font-size: 0.8rem; }
+
+  /* Order Form */
+  .order-form { padding: 1rem; border-top: 1px solid #ddd; }
+  .order-form input { width: 100%; padding: 0.7rem; margin-bottom: 0.5rem; border-radius: 5px; border: 1px solid #ccc; }
+  .order-form button { width: 100%; padding: 0.7rem; background: red; color: #fff; border: none; cursor: pointer; border-radius: 5px; font-weight: 700; }
+
+  /* WhatsApp */
+  .whatsapp { position: fixed; bottom: 1.5rem; left: 1.5rem; background: #25D366; color: #fff; border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; z-index: 1000; }
+
+  /* Responsive */
+  @media(max-width:768px){ .hero-text h1{ font-size:2rem; } .product-card{ min-width:200px; } }
+</style>
+</head>
+<body>
+
+<!-- Hero Section -->
+<header>
+  <img src="https://i.ibb.co/60Rzwpgr/IMG-20260305-WA0000.jpg" alt="UK BRAND Hero">
+  <div class="hero-text">
+    <h1>Fresh finds, best prices</h1>
+    <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+  </div>
+</header>
+
+<!-- Products -->
+<section id="products">
+  <h2>Our Products</h2>
+  <div class="carousel" id="productCarousel">
+    <!-- Product cards generated via JS -->
+  </div>
+</section>
+
+<!-- Floating Cart -->
+<div class="cart-btn" id="cartBtn">🛒<div class="cart-count" id="cartCount">0</div></div>
+
+<!-- Cart Modal -->
+<div class="cart-modal" id="cartModal">
+  <div class="cart-header">
+    <span>Cart</span>
+    <button onclick="toggleCart()">✖</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="order-form">
+    <input type="text" id="customerName" placeholder="Your Name">
+    <input type="tel" id="customerPhone" placeholder="Phone Number">
+    <button onclick="sendOrder()">Send Order</button>
+  </div>
+</div>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/03038457357" class="whatsapp" target="_blank">💬</a>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  // Initialize EmailJS
+  emailjs.init("YOUR_USER_ID"); // Replace with your EmailJS user ID
+
+  // Products Data
+  const products = [
+    {name:'Product 1', price:6499, images:['https://i.ibb.co/VyGCqd0/IMG-20260305-WA0027-1.jpg','https://i.ibb.co/0RkspPLd/IMG-20260305-WA0026.jpg']},
+    {name:'Product 2', price:6499, images:['https://i.ibb.co/RGGRbtLy/IMG-20260305-WA0025-1.jpg']},
+    {name:'Product 3', price:6499, images:['https://i.ibb.co/VpQzkbP6/IMG-20260305-WA0023.jpg','https://i.ibb.co/j0dyXTr/IMG-20260305-WA0022.jpg']},
+    {name:'Product 4', price:5999, images:['https://i.ibb.co/RTV7J32V/IMG-20260305-WA0019.jpg','https://i.ibb.co/G3Rqy276/IMG-20260305-WA0018.jpg']},
+    {name:'Product 5', price:5999, images:['https://i.ibb.co/dwGSYmK8/IMG-20260305-WA0020.jpg','https://i.ibb.co/LhdtGvxs/IMG-20260305-WA0021.jpg']},
+    {name:'Product 6', price:6499, images:['https://i.ibb.co/v4pdgyf3/IMG-20260305-WA0016.jpg','https://i.ibb.co/jkQ8ndp1/IMG-20260305-WA0015.jpg']},
+    {name:'Product 7', price:5999, images:['https://i.ibb.co/0yW79qLX/IMG-20260305-WA0024.jpg','https://i.ibb.co/351ZHwTd/IMG-20260305-WA0017.jpg']},
+    {name:'Product 8', price:4499, images:['https://i.ibb.co/0V6XcjP2/IMG-20260305-WA0014.jpg','https://i.ibb.co/RpBd09VL/IMG-20260305-WA0013.jpg']},
+    {name:'Product 9', price:4499, images:['https://i.ibb.co/SXc8fC47/IMG-20260305-WA0012.jpg','https://i.ibb.co/nVHNtLz/IMG-20260305-WA0011.jpg']},
+    {name:'Product 10', price:3499, images:['https://i.ibb.co/8n7WcqnM/IMG-20260305-WA0009.jpg','https://i.ibb.co/MxggRXYb/IMG-20260305-WA0010.jpg']},
+    {name:'Product 11', price:6499, images:['https://i.ibb.co/LD0sYDPL/IMG-20260305-WA0008.jpg','https://i.ibb.co/nsr8m8bN/IMG-20260305-WA0007.jpg']},
+    {name:'Product 12', price:6499, images:['https://i.ibb.co/V8LRncG/IMG-20260305-WA0006.jpg','https://i.ibb.co/xSBvtgML/IMG-20260305-WA0005.jpg']},
+    {name:'Product 13', price:3499, images:['https://i.ibb.co/GQ9F2JWD/IMG-20260305-WA0004.jpg','https://i.ibb.co/mC2XnVPc/IMG-20260305-WA0003.jpg']},
+    {name:'Product 14', price:3499, images:['https://i.ibb.co/Z18Ht5qX/IMG-20260305-WA0002.jpg','https://i.ibb.co/k6VHzT7x/IMG-20260305-WA0001.jpg']}
+  ];
+
+  const carousel = document.getElementById('productCarousel');
+  const cartBtn = document.getElementById('cartBtn');
+  const cartModal = document.getElementById('cartModal');
+  const cartItemsDiv = document.getElementById('cartItems');
+  const cartCount = document.getElementById('cartCount');
+
+  let cart = [];
+
+  function renderProducts() {
+    products.forEach((p, i) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${p.images[0]}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>₹${p.price}</p>
+        <button onclick="addToCart(${i})">Add to Cart</button>
+      `;
+      carousel.appendChild(card);
+    });
+  }
+
+  function addToCart(index) {
+    const product = products[index];
+    const cartItem = cart.find(item => item.name === product.name);
+    if(cartItem) { cartItem.qty++; }
+    else { cart.push({...product, qty:1}); }
+    updateCart();
+  }
+
+  function updateCart() {
+    cartItemsDiv.innerHTML = '';
+    cart.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <img src="${item.images[0]}" alt="${item.name}">
+        <div class="cart-item-info">
+          <h4>${item.name}</h4>
+          <p>₹${item.price} x ${item.qty}</p>
+        </div>
+        <button onclick="removeFromCart(${i})">Remove</button>
+      `;
+      cartItemsDiv.appendChild(div);
+    });
+    cartCount.textContent = cart.reduce((a,b)=>a+b.qty,0);
+  }
+
+  function removeFromCart(i) {
+    cart.splice(i,1);
+    updateCart();
+  }
+
+  function toggleCart() {
+    cartModal.classList.toggle('active');
+  }
+
+  cartBtn.addEventListener('click', toggleCart);
+
+  function sendOrder() {
+    const name = document.getElementById('customerName').value;
+    const phone = document.getElementById('customerPhone').value;
+    if(!name || !phone || cart.length===0){ alert('Fill all fields & add products'); return; }
+    let items = cart.map(i=>`${i.name} - ₹${i.price} x ${i.qty}`).join('\n');
+    const templateParams = {
+      to_name: 'UK BRAND Owner',
+      from_name: name,
+      phone: phone,
+      order_details: items
+    };
+    emailjs.send('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID',templateParams)
+      .then(()=>{ alert('Order Sent!'); cart=[]; updateCart(); toggleCart(); })
+      .catch(err=>{ alert('Error sending order'); console.log(err); });
+  }
+
+  renderProducts();
+</script>
+</body>
+    </html>
